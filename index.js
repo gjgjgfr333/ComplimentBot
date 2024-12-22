@@ -1,4 +1,5 @@
 const TelegramApi = require('node-telegram-bot-api')
+const port = process.env["SPECIAL_PORT"] || 4001
 
 const token = '7731147552:AAEoMYG2aXTy9cpOmZ01mIKGwU2-oLE7flM'
 const bot = new TelegramApi(token, {polling: true})
