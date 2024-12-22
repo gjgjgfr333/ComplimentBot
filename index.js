@@ -1,5 +1,20 @@
 const TelegramApi = require('node-telegram-bot-api')
-const port = process.env["SPECIAL_PORT"] || 4001
+const express = require('express'); // Подключаем фреймворк Express
+
+const app = express(); // Создаем экземпляр приложения
+
+// Устанавливаем простой маршрут
+app.get('/', (req, res) => {
+    res.send('Hello, World!');
+});
+
+// Устанавливаем порт из переменной окружения или по умолчанию
+const PORT = process.env.PORT || 3000;
+
+// Запускаем сервер
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
 
 const token = '7731147552:AAEoMYG2aXTy9cpOmZ01mIKGwU2-oLE7flM'
 const bot = new TelegramApi(token, {polling: true})
