@@ -1,21 +1,5 @@
 const TelegramApi = require('node-telegram-bot-api')
-const express = require('express'); // Подключаем фреймворк Express
-
-const app = express(); // Создаем экземпляр приложения
-
-// Устанавливаем простой маршрут
-app.get('/', (req, res) => {
-    res.send('Hello, World!');
-});
-
-
-// Устанавливаем порт из переменной окружения или по умолчанию
-const PORT = process.env.PORT || 3000;
-
-// Запускаем сервер
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+const {complimentData} = require('./complimentData')
 
 const token = '7731147552:AAEoMYG2aXTy9cpOmZ01mIKGwU2-oLE7flM'
 const bot = new TelegramApi(token, {polling: true})
@@ -31,30 +15,14 @@ const button = {
 const chatIds = new Set()
 
 const sendCompliment = async (chanId) => {
-    try {
-        const response = await fetch('https://tools-api.robolatoriya.com/compliment?type=1');
 
-        if (!response.ok) {
-            throw new Error(`Ошибка API: ${response.status}`);
-        }
+    const randomNumber = Math.floor(Math.random() * complimentData.length);
 
-        const data = await response.json();
-        console.log(data, 'data')
-
-        await bot.sendMessage(
-            chanId,
-            `${data?.text || 'Вы великолепны!'}`,
-            button
-        );
-    } catch (error) {
-        console.error('Ошибка при обработке запроса:', error);
-
-        await bot.sendMessage(
-            chanId,
-            'Произошла ошибка, попробуйте позже!',
-            button
-        );
-    }
+    await bot.sendMessage(
+        chanId,
+        `${complimentData[randomNumber] || 'Вы великолепны!'}`,
+        button
+    );
 }
 
 bot.setMyCommands([
@@ -70,7 +38,7 @@ bot.on('message', (message) => {
             message.chat.id,
             `Привет ${message.chat.first_name}, я бот комплиментов и теперь раз в сутки в 10 утра я буду делать тебе комплимент!`,
             button
-            )
+        )
     }
 })
 
